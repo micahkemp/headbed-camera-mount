@@ -5,7 +5,7 @@ from scadder.componenttypes import *
 class BedMount(Model):
     spacer_diameter = 6
     spacer_diameter_tolerance = 0.1
-    spacer_height = 6
+    spacer_height = 5.5
     spacer_offset = 12
     guide_width = 12.3
     guide_width_tolerance = 0.1
