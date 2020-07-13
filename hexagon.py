@@ -5,7 +5,7 @@ from math import sin, cos, radians
 
 class Hexagon(Model):
     def __init__(self, name, diameter):
-        self.diameter = 6
+        self.diameter = diameter
 
         super(Hexagon, self).__init__(name=name)
 

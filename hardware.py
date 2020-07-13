@@ -4,7 +4,7 @@ from scadder.componenttypes import *
 from hexagon import Hexagon
 
 class NutHole(Model):
-    diameter = 6.6
+    diameter = 6.2
     depth = 2.2
 
     def hexagon(self):
