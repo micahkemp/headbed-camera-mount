@@ -99,10 +99,10 @@ class BedMountGuideRailsComponent(Difference):
 
 
 class BedMount(Union):
-    spacer_diameter = 6.2
+    spacer_diameter = 6.1
     spacer_height = 5.5
     spacer_offset = 12
-    guide_width = 12.3
+    guide_width = 12.4
 
     def __init__(self, name=None):
         super(BedMount, self).__init__(name=name, children=None)
