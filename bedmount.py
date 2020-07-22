@@ -1,4 +1,4 @@
-from scadder import Union, Cube, Cylinder, Difference, Translate, XYZ
+from scadder import Union, Cube, Cylinder, Difference, XYZ
 
 
 class BedMountSpacerComponent(Union):
@@ -30,24 +30,18 @@ class BedMountSpacerComponent(Union):
         )
 
     def spacer_hole(self):
-        return Translate(
-            name="spacer_hole",
+        return Cylinder(
+            diameter=self.hole_diameter,
+            height=self.height,
+        ).translate(
             vector=XYZ(self.length/2, self.width/2, 0),
-            children=[
-                Cylinder(
-                    diameter=self.hole_diameter,
-                    height=self.height,
-                )
-            ]
+            name="spacer_hole",
         )
 
     def spacer_component(self):
-        return Difference(
+        return self.spacer_cube().subtract(
+            component=self.spacer_hole(),
             name="spacer_component",
-            children=[
-                self.spacer_cube(),
-                self.spacer_hole(),
-            ]
         )
 
 
@@ -81,20 +75,17 @@ class BedMountGuideRailsComponent(Difference):
         )
 
     def guide_cutout(self):
-        return Translate(
+        return Cube(
+            length=self.guide_width,
+            width=self.outer_cube_width,
+            height=self.height,
+        ).translate(
             name="guide_cutout",
             vector=XYZ(
                 self.outer_cube_length / 2 - self.guide_width / 2,
                 0,
                 0,
-            ),
-            children=[
-                Cube(
-                    length=self.guide_width,
-                    width=self.outer_cube_width,
-                    height=self.height,
-                )
-            ]
+            )
         )
 
 
@@ -114,16 +105,13 @@ class BedMount(Union):
                 hole_offset=self.spacer_offset,
                 hole_diameter=self.spacer_diameter,
             ),
-            Translate(
+            BedMountGuideRailsComponent(
+                guide_width=self.guide_width,
+                height=self.spacer_height,
+                spacer_offset=self.spacer_offset,
+            ).translate(
                 name="guide_layer",
                 vector=XYZ(0, 0, -self.spacer_height),
-                children=[
-                    BedMountGuideRailsComponent(
-                        guide_width=self.guide_width,
-                        height=self.spacer_height,
-                        spacer_offset=self.spacer_offset,
-                    ),
-                ]
             ),
         ])
 

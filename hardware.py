@@ -1,4 +1,4 @@
-from scadder import LinearExtrude, Hexagon, Union, Cylinder, Cube, Translate, XYZ, Difference
+from scadder import LinearExtrude, Hexagon, Union, Cylinder, Cube, XYZ, Difference
 
 
 class NutHole(LinearExtrude):
@@ -54,7 +54,7 @@ class TestHardwareCube(Difference):
         super(TestHardwareCube, self).__init__(name=name, children=None)
 
         self.add_children([
-            self.test_cube_centered(),
+            self.test_cube(),
             self.all_holes(),
         ])
 
@@ -63,33 +63,21 @@ class TestHardwareCube(Difference):
             length=self.cube_length,
             width=self.cube_width,
             height=self.cube_height,
-        )
-
-    def test_cube_centered(self):
-        return Translate(
+        ).translate(
             name="centered_cube",
-            vector=XYZ(
-                -self.cube_length/2,
-                -self.cube_width/2,
-                0,
-            ),
-            children=[self.test_cube()]
+            vector=XYZ(-self.cube_length/2, -self.cube_width/2, 0),
         )
 
     def nut_hole_top_of_cube(self):
-        return Translate(
+        return NutHole().translate(
             name="placed_nut_hole",
             vector=XYZ(0, 0, self.cube_height-NutHole.depth),
-            children=[NutHole()]
         )
 
     def all_holes(self):
-        return Union(
+        return ScrewHole().add(
+            self.nut_hole_top_of_cube(),
             name="all_holes",
-            children=[
-                ScrewHole(),
-                self.nut_hole_top_of_cube(),
-            ]
         )
 
 
